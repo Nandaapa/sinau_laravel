@@ -31,6 +31,7 @@ class BukuController extends Controller
     public function createbuku(Request $req)
     {
         $validator = Validator::make($req->all(), [
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'judul' => 'required',
             'pengarang' => 'required'
         ]);
@@ -38,6 +39,7 @@ class BukuController extends Controller
             return Response()->json($validator->errors()->toJson());
         }
         $save = Buku::create([
+            'foto' => $req->get('foto'),
             'judul' => $req->get('judul'),
             'pengarang' => $req->get('pengarang')
         ]);

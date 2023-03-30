@@ -47,7 +47,6 @@ class TransaksiController extends Controller
         $validator = Validator::make($req->all(), [
             'id_siswa' => 'required',
             'id_buku' => 'required',
-            'tgl_kembali' => 'required',
             'status' => "dipinjam"
         ]);
         if ($validator->fails()) {
@@ -55,12 +54,15 @@ class TransaksiController extends Controller
         }
 
         $tgl_pinjam= carbon::now();
+                
+        $tgl_kembali= carbon::now()->addDays(7);
+
 
         $save = Peminjaman::create([
             'id_siswa' => $req->get('id_siswa'),
             'id_buku' => $req->get('id_buku'),
             'tgl_pinjam' => $tgl_pinjam,
-            'tgl_kembali' => $req->get('tgl_kembali'),
+            'tgl_kembali' => $tgl_kembali,
             'status' => "dipinjam"
         ]);
         if ($save) {
@@ -105,7 +107,7 @@ class TransaksiController extends Controller
     public function kembali($id)
     {
         
-        $tgl_kembali= carbon::now()->addDays(3);
+        $tgl_kembali= carbon::now();
 
 
         $kembali = Peminjaman::where('id_peminjaman',$id)
